@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: case3-deployment
+  namespace: case3
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: case3
+
+  template:
+    metadata:
+      labels:
+        app: case3
+
+    spec:
+      containers:
+        - name: case3-container
+          image: case3-image
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
+          livenessProbe:
+            httpGet:  
+              path: /
+              port: 3000  
+            initialDelaySeconds: 5  
+            periodSeconds: 10
+             
+          readinessProbe:
+            httpGet:
+              path: / 
+              port: 3000  
+            initialDelaySeconds: 5  
+            periodSeconds: 10 
